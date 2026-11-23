@@ -1,0 +1,34 @@
+
+> ladder-code@0.0.0 dev:h5
+> uni
+
+请注意运行模式下，因日志输出、sourcemap 以及未压缩源码等原因，性能和包体积，均不及发行模式。
+vite是按需编译，运行时点击某个未编译页面会先编译后加载，导致显示较慢，发行后无此问题。
+编译器版本：5.34（vue3）
+正在编译中...
+Port 5173 is in use, trying another one...
+Port 5174 is in use, trying another one...
+[36m
+  vite v5.2.8[39m[32m dev server running at:
+[39m
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5175[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+
+  [36mready in 40675ms.[39m
+
+[2m17:47:14[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue[22m
+[2m18:33:42[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:33:49[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:34:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:34:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:34:38[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:34:40[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?uni, /src/pages/sequence/game.vue?uni, /src/pages/index/index.vue, /src/pages/sequence/levels.vue, /src/pages/sequence/game.vue[22m
+[2m18:35:15[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/game.vue[22m
+[2m18:35:17[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/game.vue?vue&type=style&index=0&scoped=2b245b89&lang.css[22m
+[2m18:35:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/game.vue?vue&type=style&index=0&scoped=2b245b89&lang.css[22m
+[2m18:35:37[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/levels.vue[22m
+[2m18:35:41[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/levels.vue?vue&type=style&index=0&scoped=266602cf&lang.css[22m
+[2m18:35:43[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/sequence/levels.vue?vue&type=style&index=0&scoped=266602cf&lang.css[22m
+[2m18:35:49[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue[22m
+[2m18:35:52[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue[22m
+[2m18:35:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/index/index.vue?vue&type=style&index=0&scoped=83a5a03c&lang.css[22m
