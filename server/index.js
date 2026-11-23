@@ -1,4 +1,5 @@
 import { createServer } from 'node:http'
+import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL, fileURLToPath } from 'node:url'
 import { WebSocketServer } from 'ws'
@@ -8,15 +9,85 @@ import { readPort } from './port.js'
 /**
  * 阶梯密码服务器（M3：双人 1v1 设密猜谜；单人不走服务器）。
  * createServerApp(port, opts) 返回 { httpServer, wss, port, mgr }，测试用随机端口与短心跳。
- * v1 不托管 H5 静态产物（部署期由顶层 nginx/IIS 托管，或后续按顶牛子模式补 STATIC_DIR）。
+ * 同端口托管 H5 静态产物（dist/build/h5）：一个进程同时提供页面与 WebSocket，
+ * 不再需要 nginx 托管页面；dist 缺失时回 426 提示先构建。
  */
 
 const HEARTBEAT_MS = 15_000
 
-export function createServerApp(port = readPort(), { heartbeatMs = HEARTBEAT_MS } = {}) {
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.map': 'application/json',
+}
+
+/**
+ * html 必须 no-cache（index.html 引用带 hash 的 js，缓存住会导致强刷也拿不到新包），
+ * 带 hash 的 assets 长缓存。
+ */
+function sendFile(res, file, data) {
+  const ext = path.extname(file).toLowerCase()
+  const cache = ext === '.html' ? 'no-cache, must-revalidate' : 'public, max-age=31536000, immutable'
+  res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream', 'Cache-Control': cache }).end(data)
+}
+
+export function createServerApp(port = readPort(), { heartbeatMs = HEARTBEAT_MS, staticDir: staticDirOpt = null } = {}) {
   const mgr = new SequenceRoomManager()
-  const httpServer = createServer((req, res) => {
-    res.writeHead(426).end('WebSocket only')
+  const staticDir = staticDirOpt
+    ? path.resolve(staticDirOpt)
+    : process.env.STATIC_DIR
+      ? path.resolve(process.env.STATIC_DIR)
+      : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../dist/build/h5')
+
+  let staticReady = null
+  const httpServer = createServer(async (req, res) => {
+    try {
+      const url = new URL(req.url, 'http://localhost')
+      let pathname = decodeURIComponent(url.pathname)
+      if (pathname.includes('..')) {
+        res.writeHead(403).end()
+        return
+      }
+      if (pathname === '/healthz') {
+        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' }).end('ok')
+        return
+      }
+      if (pathname === '/') pathname = '/index.html'
+      const file = path.join(staticDir, pathname)
+      if (!file.startsWith(staticDir)) {
+        res.writeHead(403).end()
+        return
+      }
+      staticReady ||= fs.readdir(staticDir).then(() => true, () => false)
+      if (!(await staticReady)) {
+        res.writeHead(426).end('WebSocket only: 请先 npm run build:h5')
+        return
+      }
+      const data = await fs.readFile(file).catch(() => null)
+      if (data === null) {
+        const index = await fs.readFile(path.join(staticDir, 'index.html')).catch(() => null)
+        if (index === null) {
+          res.writeHead(404).end('Not Found')
+          return
+        }
+        sendFile(res, 'index.html', index)
+        return
+      }
+      sendFile(res, file, data)
+    } catch (e) {
+      console.error('[ladder-code] static error:', e.message)
+      res.writeHead(500).end()
+    }
   })
   const wss = new WebSocketServer({ server: httpServer, maxPayload: 64 * 1024 })
 
@@ -140,5 +211,8 @@ function sanitizeName(name) {
 const entry = process.argv[1] ? pathToFileURL(process.argv[1]).href : ''
 if (entry && entry === import.meta.url) {
   const app = createServerApp(Number(process.env.PORT || readPort()))
-  app.httpServer.listen(app.port, () => console.log(`[ladder-code] server listening on :${app.port}`))
+  app.httpServer.listen(app.port, () => {
+    console.log(`[ladder-code] server listening on :${app.port}（static: ${process.env.STATIC_DIR || 'dist/build/h5'}）`)
+    console.log(`[ladder-code] ws://127.0.0.1:${app.port}  ·  页面 http://127.0.0.1:${app.port}`)
+  })
 }
