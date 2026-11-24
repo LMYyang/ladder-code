@@ -107,7 +107,7 @@ import { useSequence } from '../../composables/useSequence.js'
 import { useSound } from '../../composables/useSound.js'
 
 const game = useSequence()
-const { state, level } = game
+const { state, level, triesMax } = game
 const sound = useSound()
 const lastStar = ref(0)
 
@@ -231,11 +231,19 @@ function goBack() {
   font-size: 28rpx;
   color: #c9a227;
   padding: 8rpx 12rpx;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .nav-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #f5f0e1;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 /* 变体徽标 */
 .variant-badge {
@@ -353,14 +361,21 @@ function goBack() {
   font-size: 30rpx;
   letter-spacing: 6rpx;
   color: #f5f0e1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .h-fb {
   font-size: 24rpx;
   color: #b8a888;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .h-flag.win {
   color: #c9a227;
   font-weight: bold;
+  flex-shrink: 0;
 }
 .history-empty {
   text-align: center;

@@ -217,13 +217,21 @@ function goHome() {
   font-size: 28rpx;
   color: #c9a227;
   padding: 8rpx 12rpx;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .nav-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #f5f0e1;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.nav-right { min-width: 80rpx; }
+.nav-right { min-width: 80rpx; flex-shrink: 0; }
 
 /* 大厅 */
 .lobby {
@@ -373,9 +381,17 @@ function goHome() {
   border-bottom: 1rpx solid rgba(245, 240, 225, 0.08);
 }
 .history-row.top { background: rgba(201, 162, 39, 0.12); border-radius: 8rpx; }
-.h-seq { font-size: 30rpx; letter-spacing: 6rpx; color: #f5f0e1; }
-.h-fb { font-size: 24rpx; color: #b8a888; }
-.h-flag.win { color: #c9a227; font-weight: bold; }
+.h-seq {
+  font-size: 30rpx;
+  letter-spacing: 6rpx;
+  color: #f5f0e1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.h-fb { font-size: 24rpx; color: #b8a888; flex-shrink: 0; white-space: nowrap; }
+.h-flag.win { color: #c9a227; font-weight: bold; flex-shrink: 0; }
 .history-empty { text-align: center; color: #8a7a60; font-size: 24rpx; padding: 24rpx 0; }
 .ops-row {
   display: flex;
