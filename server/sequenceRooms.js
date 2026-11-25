@@ -429,23 +429,6 @@ export class SequenceRoomManager {
     this.pushRoomState(room)
   }
 
-  removeMember(room, member) {
-    room.members = room.members.filter((m) => m !== member)
-    this.tokens.delete(member.token)
-    room.lastActiveAt = this.now()
-    if (room.members.length === 0) {
-      this.destroyRoom(room.roomId)
-      return
-    }
-    if (member.isHost) this.promoteHost(room)
-    this.pushRoomState(room)
-  }
-
-  promoteHost(room) {
-    const next = room.members[0]
-    if (next) next.isHost = true
-  }
-
   /** 定时清理（30s 周期，模式照抄 rooms.js sweep） */
   sweep() {
     for (const room of [...this.rooms.values()]) {
