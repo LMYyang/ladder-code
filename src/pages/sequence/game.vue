@@ -48,15 +48,17 @@
       <text class="hint-text">提示：第 {{ state.hintOffer.slot + 1 }} 位 ∈ { {{ state.hintOffer.values.join('，') }} }</text>
     </view>
 
-    <!-- 历史列表 -->
-    <scroll-view class="history" scroll-y>
-      <view v-for="(g, idx) in state.guesses" :key="state.guesses.length - idx" class="history-row" :class="{ top: idx === 0, repeat: state.repeatOf === state.guesses.length - idx }">
-        <text class="h-seq">{{ g.seq.join(' ') }}</text>
-        <text class="h-fb">{{ fbText(g) }}</text>
-        <text v-if="g.solved" class="h-flag win">✓</text>
-      </view>
-      <view v-if="state.guesses.length === 0" class="history-empty">还没有猜想记录</view>
-    </scroll-view>
+    <!-- 历史列表：scroll-view 在 H5 下不参与收缩，需外层容器承尺寸，避免右侧溢出被裁 -->
+    <view class="history-wrap">
+      <scroll-view class="history" scroll-y>
+        <view v-for="(g, idx) in state.guesses" :key="state.guesses.length - idx" class="history-row" :class="{ top: idx === 0, repeat: state.repeatOf === state.guesses.length - idx }">
+          <text class="h-seq">{{ g.seq.join(' ') }}</text>
+          <text class="h-fb">{{ fbText(g) }}</text>
+          <text v-if="g.solved" class="h-flag win">✓</text>
+        </view>
+        <view v-if="state.guesses.length === 0" class="history-empty">还没有猜想记录</view>
+      </scroll-view>
+    </view>
 
     <!-- 底部操作区 -->
     <view class="ops-row">
@@ -334,10 +336,17 @@ function goBack() {
   color: #a8d8a0;
 }
 /* 历史 */
-.history {
+.history-wrap {
   flex: 1;
   min-height: 160rpx;
   margin: 8rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.history {
+  flex: 1;
+  width: 100%;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12rpx;
   padding: 8rpx 16rpx;
