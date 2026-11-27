@@ -218,7 +218,9 @@ function goBack() {
 
 <style scoped>
 .page {
-  min-height: 100vh;
+  /* 必须用确定高度：min-height 下 flex:1 子项按内容撑开，记录一多变会把键盘顶出屏幕 */
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -337,15 +339,18 @@ function goBack() {
 }
 /* 历史 */
 .history-wrap {
-  flex: 1;
-  min-height: 160rpx;
+  /* flex-basis:0：只吃剩余空间，不随记录条数增长；min-height:0 允许被压缩以保住键盘 */
+  flex: 1 1 0;
+  min-height: 0;
   margin: 8rpx 32rpx;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 .history {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
+  height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12rpx;

@@ -202,7 +202,9 @@ function goHome() {
 
 <style scoped>
 .page {
-  min-height: 100vh;
+  /* 确定高度，否则超短视口/记录变多时键盘被顶出可视区 */
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -285,7 +287,8 @@ function goHome() {
 
 /* 房间 */
 .room {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -365,8 +368,9 @@ function goHome() {
 }
 .hint-text { font-size: 26rpx; color: #a8d8a0; }
 .history {
-  flex: 1;
-  min-height: 140rpx;
+  /* 只占剩余空间，记录再多也不外扩 */
+  flex: 1 1 0;
+  min-height: 0;
   margin: 8rpx 32rpx;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12rpx;
